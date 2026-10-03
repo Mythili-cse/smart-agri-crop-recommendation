@@ -1,0 +1,108 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Sprout, GraduationCap, ShieldCheck } from 'lucide-react';
+
+export const Footer: React.FC = () => {
+  return (
+    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 pt-12 pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10 pb-10 border-b border-slate-800/80">
+          
+          {/* Column 1: Brand & Academic Info */}
+          <div className="md:col-span-2 space-y-4">
+            <Link to="/" className="inline-flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-600/30">
+                <Sprout className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white tracking-tight">
+                  Smart Agri
+                </span>
+                <span className="text-xs font-semibold text-emerald-400 tracking-wider uppercase">
+                  Crop Recommendation System
+                </span>
+              </div>
+            </Link>
+            
+            <p className="text-sm text-slate-400 leading-relaxed max-w-md">
+              An intelligent machine-learning web platform that analyzes soil chemistry and environmental microclimate parameters to provide actionable crop recommendations for modern precision agriculture.
+            </p>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-950/50 border border-emerald-800/50 text-emerald-400 text-xs font-medium">
+              <GraduationCap className="w-4 h-4 text-emerald-400" />
+              <span>Department of Computer Science and Engineering</span>
+            </div>
+          </div>
+
+          {/* Column 2: Navigation Links */}
+          <div>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              Navigation
+            </h3>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <Link to="/" className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/recommend" className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5">
+                  Recommendation
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link to="/team" className="hover:text-emerald-400 transition-colors inline-flex items-center gap-1.5">
+                  Team
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Technologies */}
+          <div>
+            <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              Technology Stack
+            </h3>
+            <ul className="space-y-2 text-xs text-slate-300">
+              <li className="flex items-center justify-between py-1 border-b border-slate-800/50">
+                <span>React & TypeScript</span>
+                <span className="text-emerald-400 font-mono">Frontend UI</span>
+              </li>
+              <li className="flex items-center justify-between py-1 border-b border-slate-800/50">
+                <span>Python & ML Engine</span>
+                <span className="text-emerald-400 font-mono">Core Analytics</span>
+              </li>
+              <li className="flex items-center justify-between py-1 border-b border-slate-800/50">
+                <span>Flask REST API</span>
+                <span className="text-emerald-400 font-mono">Backend Ready</span>
+              </li>
+              <li className="flex items-center justify-between py-1 border-b border-slate-800/50">
+                <span>Tailwind CSS</span>
+                <span className="text-emerald-400 font-mono">Modern Design</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+          <p className="text-center sm:text-left">
+            © 2026 Smart Agri – Crop Recommendation System. Mini Project.
+          </p>
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1 text-slate-400">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              Academic Mini-Project Verification
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
