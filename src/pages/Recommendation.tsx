@@ -34,19 +34,19 @@ export const Recommendation: React.FC = () => {
         
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
             <Sprout className="w-4 h-4 text-emerald-600" />
             <span>AI Analytical Module</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">
-            {result ? 'Crop Recommendation Result' : 'Find the Right Crop for Your Field'}
+            {result ? 'Crop Recommendation Result' : 'Find the Right Crop for Your Conditions'}
           </h1>
 
           <p className="text-slate-600 text-base sm:text-lg">
             {result
               ? 'Comprehensive agricultural compatibility analysis based on your submitted soil and environmental parameters.'
-              : 'Enter soil chemistry and climate measurements below to run multi-crop suitability scoring.'}
+              : 'Enter your soil and environmental conditions to receive an AI-powered crop recommendation.'}
           </p>
         </div>
 

@@ -154,18 +154,18 @@ export const ParameterInput: React.FC<ParameterInputProps> = ({ onSubmit, isLoad
 
         <form onSubmit={handleSubmit} className="space-y-8" noValidate>
           
-          {/* Section 1: Soil Parameters */}
+          {/* Section 1: SOIL HEALTH */}
           <div className="space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
               <div className="p-2 rounded-xl bg-emerald-100 text-emerald-700">
                 <Sprout className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900">
-                  Soil Parameters
+                <h3 className="text-lg font-extrabold text-slate-900 tracking-wider">
+                  SOIL HEALTH
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Chemical nutrient composition (N-P-K) and soil pH level
+                  Nitrogen (N), Phosphorus (P), Potassium (K), and Soil pH
                 </p>
               </div>
             </div>
@@ -359,18 +359,18 @@ export const ParameterInput: React.FC<ParameterInputProps> = ({ onSubmit, isLoad
             </div>
           </div>
 
-          {/* Section 2: Environmental Parameters */}
+          {/* Section 2: CLIMATE CONDITIONS */}
           <div className="space-y-4 pt-4">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
               <div className="p-2 rounded-xl bg-teal-100 text-teal-700">
                 <Thermometer className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900">
-                  Environmental Parameters
+                <h3 className="text-lg font-extrabold text-slate-900 tracking-wider">
+                  CLIMATE CONDITIONS
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Atmospheric weather, relative moisture, and rainfall levels
+                  Temperature (°C), Humidity (%), and Rainfall (mm)
                 </p>
               </div>
             </div>
@@ -518,7 +518,7 @@ export const ParameterInput: React.FC<ParameterInputProps> = ({ onSubmit, isLoad
             </div>
           </div>
 
-          {/* Form Submit Button with Animated Multi-step Loading */}
+          {/* Form Submit Button with Animated Loading */}
           <div className="pt-4 border-t border-slate-200">
             <button
               type="submit"
@@ -535,7 +535,7 @@ export const ParameterInput: React.FC<ParameterInputProps> = ({ onSubmit, isLoad
               ) : (
                 <>
                   <Sliders className="w-5 h-5 text-emerald-200" />
-                  <span>Analyze & Recommend Crop</span>
+                  <span>Analyze & Recommend</span>
                 </>
               )}
             </button>

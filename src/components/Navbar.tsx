@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Sprout, Menu, X, ChevronRight } from 'lucide-react';
+import { Sprout, Menu, X, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navbar: React.FC = () => {
@@ -28,14 +28,33 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Get Recommendation', path: '/recommend' },
+    { name: 'How It Works', path: '/#how-it-works', anchorId: 'how-it-works' },
+    { name: 'Crop Recommendation', path: '/recommend' },
+    { name: 'Supported Crops', path: '/crops' },
     { name: 'About', path: '/about' },
-    { name: 'Team', path: '/team' },
   ];
 
+  const handleNavClick = (link: { name: string; path: string; anchorId?: string }, e: React.MouseEvent) => {
+    if (link.anchorId) {
+      if (location.pathname === '/') {
+        e.preventDefault();
+        const element = document.getElementById(link.anchorId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        // If on another route, navigate to Home with hash
+        navigate(`/${link.path.replace('/', '')}`);
+      }
+    }
+  };
+
   const isActive = (path: string) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
+    if (path === '/' && location.pathname === '/' && !location.hash) return true;
+    if (path === '/recommend' && location.pathname === '/recommend') return true;
+    if (path === '/crops' && location.pathname === '/crops') return true;
+    if (path === '/about' && location.pathname === '/about') return true;
+    if (path.includes('#') && location.pathname === '/' && location.hash === `#${path.split('#')[1]}`) return true;
     return false;
   };
 
@@ -43,40 +62,41 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-slate-900/90 backdrop-blur-md shadow-lg shadow-emerald-950/20 py-3 border-b border-slate-800'
-          : 'bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-transparent py-4'
+          ? 'bg-slate-900/95 backdrop-blur-md shadow-lg shadow-emerald-950/20 py-3 border-b border-slate-800'
+          : 'bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-lg p-1">
+          <Link to="/" className="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-lg p-1">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-600/30 group-hover:scale-105 transition-transform duration-200">
               <Sprout className="w-6 h-6 text-white" />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-extrabold text-white tracking-tight leading-none group-hover:text-emerald-400 transition-colors">
-                Smart Agri-Crop
+              <span className="text-xl font-extrabold text-white tracking-tight leading-none group-hover:text-emerald-400 transition-colors">
+                🌱 SmartAgri
               </span>
-              <span className="text-[11px] font-medium text-emerald-400 tracking-wider uppercase mt-0.5">
-                Recommendation System
+              <span className="text-[10px] font-semibold text-emerald-400 tracking-wider uppercase mt-1">
+                AI Recommendation System
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden lg:flex items-center space-x-1">
             {navLinks.map((link) => {
               const active = isActive(link.path);
               return (
                 <Link
-                  key={link.path}
+                  key={link.name}
                   to={link.path}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${
+                  onClick={(e) => handleNavClick(link, e)}
+                  className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${
                     active
-                      ? 'text-emerald-400 font-semibold bg-emerald-950/40 border border-emerald-800/50'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                      ? 'text-emerald-400 font-semibold bg-emerald-950/50 border border-emerald-800/60'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
                   }`}
                 >
                   {link.name}
@@ -96,15 +116,15 @@ export const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center">
             <button
               onClick={() => navigate('/recommend')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold text-sm shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 hover:scale-[1.02] active:scale-95 transition-all duration-200 cursor-pointer"
             >
-              <span>Get Started</span>
-              <ChevronRight className="w-4 h-4" />
+              <span>Get Recommendation</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
 
           {/* Mobile Hamburger Toggle */}
-          <div className="md:hidden flex items-center">
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -126,15 +146,16 @@ export const Navbar: React.FC = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 overflow-hidden"
+            className="lg:hidden bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 overflow-hidden"
           >
             <div className="px-4 pt-3 pb-6 space-y-2">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
                 return (
                   <Link
-                    key={link.path}
+                    key={link.name}
                     to={link.path}
+                    onClick={(e) => handleNavClick(link, e)}
                     className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                       active
                         ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-semibold'
@@ -148,10 +169,10 @@ export const Navbar: React.FC = () => {
               <div className="pt-2">
                 <button
                   onClick={() => navigate('/recommend')}
-                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-base shadow-lg shadow-emerald-600/30 active:scale-95 transition-all"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-base shadow-lg shadow-emerald-600/30 active:scale-95 transition-all"
                 >
-                  <span>Get Started</span>
-                  <ChevronRight className="w-5 h-5" />
+                  <span>Get Recommendation</span>
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -161,3 +182,4 @@ export const Navbar: React.FC = () => {
     </header>
   );
 };
+

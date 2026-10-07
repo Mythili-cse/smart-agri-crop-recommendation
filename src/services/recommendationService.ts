@@ -1,41 +1,53 @@
 import type { CropInputParameters, PredictionResult } from '../types';
 import { calculateCropRecommendations } from '../utils/recommendationEngine';
 
-/**
- * CONFIGURATION FLAG
- * ------------------
- * Set to true when Python Flask ML backend API is running on localhost (http://127.0.0.1:5000/api/predict)
- */
-const USE_FLASK_BACKEND = false;
 const FLASK_API_URL = 'http://127.0.0.1:5000/api/predict';
 
 /**
  * Predicts suitable crop recommendations based on submitted soil and microclimate vector.
- * Uses the deterministic agronomic scoring utility (`calculateCropRecommendations`).
+ * First attempts to connect to Python Flask ML REST API at http://127.0.0.1:5000/api/predict.
+ * If unreachable or offline, falls back seamlessly to the agronomic scoring engine.
  */
 export async function predictCrop(input: CropInputParameters): Promise<PredictionResult> {
-  // Simulate network delay for realistic multi-step loading experience
-  await new Promise((resolve) => setTimeout(resolve, 1400));
+  // Simulate brief processing delay for smooth UI transition
+  const minDelay = new Promise((resolve) => setTimeout(resolve, 900));
 
-  if (USE_FLASK_BACKEND) {
-    try {
-      const response = await fetch(FLASK_API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(input),
-      });
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2s timeout for Flask API check
 
-      if (response.ok) {
-        // Connected to live Flask API
-        return calculateCropRecommendations(input, true);
+    const response = await fetch(FLASK_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nitrogen: input.nitrogen,
+        phosphorus: input.phosphorus,
+        potassium: input.potassium,
+        temperature: input.temperature,
+        humidity: input.humidity,
+        ph: input.ph,
+        rainfall: input.rainfall,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      const data = await response.json();
+      await minDelay;
+      if (data && data.crop) {
+        return calculateCropRecommendations(input, true, String(data.crop));
       }
-    } catch (error) {
-      console.warn('Flask backend API unreachable. Falling back to frontend prototype engine.', error);
     }
+  } catch (error) {
+    // Flask backend offline or unreachable - standard prototype fallback mode
+    console.info('Flask ML API unreachable. Running dynamic agronomic recommendation engine.', error);
   }
 
-  // Calculate dynamic recommendations based on input parameters
+  await minDelay;
   return calculateCropRecommendations(input, false);
 }
+

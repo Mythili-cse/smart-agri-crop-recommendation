@@ -12,7 +12,7 @@ export interface CropDetails {
   id: string;
   name: string;
   scientificName: string;
-  category: 'Cereal' | 'Pulse' | 'Fruit' | 'Cash Crop' | 'Fiber' | 'Plantation';
+  category: 'Cereal' | 'Pulse' | 'Fruit' | 'Commercial Crop';
   image: string;
   description: string;
   growingPeriodDays: string;
@@ -76,7 +76,7 @@ export interface ProjectObjective {
 
 export interface TechStackItem {
   name: string;
-  category: 'Backend ML' | 'Frontend UI' | 'Data Processing' | 'Tools & Versioning';
+  category: 'Backend ML' | 'Frontend UI' | 'Data Processing';
   description: string;
   iconName: string;
   isIntegratedNow: boolean;

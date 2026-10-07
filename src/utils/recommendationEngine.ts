@@ -10,10 +10,12 @@ interface ScoredCrop {
 /**
  * Calculates deterministic agronomic compatibility score for all crops in dataset.
  * Evaluates Nitrogen, Phosphorus, Potassium, Temperature, Humidity, Soil pH, and Rainfall.
+ * Supports optional override if Flask API returns a specific predicted crop.
  */
 export function calculateCropRecommendations(
   input: CropInputParameters,
-  backendConnected: boolean = false
+  backendConnected: boolean = false,
+  backendCropName?: string
 ): PredictionResult {
   const scoredCrops: ScoredCrop[] = cropDataset.map((crop) => {
     const cond = crop.idealConditions;
@@ -57,6 +59,21 @@ export function calculateCropRecommendations(
 
   // Sort descending by score
   scoredCrops.sort((a, b) => b.score - a.score);
+
+  // If Flask backend returned a predicted crop name, find it in dataset
+  if (backendCropName) {
+    const cleanBackendName = backendCropName.trim().toLowerCase();
+    const backendMatchIndex = scoredCrops.findIndex(
+      (item) => item.crop.id.toLowerCase() === cleanBackendName || item.crop.name.toLowerCase().includes(cleanBackendName)
+    );
+    if (backendMatchIndex > 0) {
+      // Move predicted crop to top index 0
+      const [backendItem] = scoredCrops.splice(backendMatchIndex, 1);
+      // Give high confidence score for backend ML model
+      backendItem.score = Math.max(backendItem.score, 92);
+      scoredCrops.unshift(backendItem);
+    }
+  }
 
   const bestMatch = scoredCrops[0] || { crop: fallbackCrop, score: 85, paramScores: {} };
   const topCrops = scoredCrops.slice(0, 3).map((item) => ({
@@ -127,14 +144,16 @@ export function calculateCropRecommendations(
     },
   ];
 
-  // Dynamic rationale generation based on strongest matching attributes
+  // Dynamic rationale generation based on submitted attributes
   const whyThisRecommendation = generateDynamicWhyCards(recommendedCrop, input);
 
   return {
     recommendedCrop,
     confidenceScore: bestMatch.score,
     topCrops,
-    explanation: `Based on your submitted soil chemistry (N: ${input.nitrogen}, P: ${input.phosphorus}, K: ${input.potassium}, pH: ${input.ph}) and climatic conditions (${input.temperature}°C, ${input.humidity}% humidity, ${input.rainfall}mm rainfall), ${recommendedCrop.name} achieved the highest compatibility score of ${bestMatch.score}%.`,
+    explanation: backendConnected && backendCropName
+      ? `Python Flask Random Forest ML Model predicted ${recommendedCrop.name} based on your submitted soil and environmental parameters (N: ${input.nitrogen}, P: ${input.phosphorus}, K: ${input.potassium}, pH: ${input.ph}, Temp: ${input.temperature}°C, Humidity: ${input.humidity}%, Rainfall: ${input.rainfall}mm).`
+      : `Based on your submitted soil chemistry (N: ${input.nitrogen}, P: ${input.phosphorus}, K: ${input.potassium}, pH: ${input.ph}) and climatic conditions (${input.temperature}°C, ${input.humidity}% humidity, ${input.rainfall}mm rainfall), ${recommendedCrop.name} achieved the highest agronomic compatibility score of ${bestMatch.score}%.`,
     parameterAnalysis,
     whyThisRecommendation,
     inputs: input,

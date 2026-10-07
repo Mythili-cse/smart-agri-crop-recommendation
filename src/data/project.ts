@@ -138,16 +138,9 @@ export const techStackItems: TechStackItem[] = [
   },
   {
     name: 'Vite',
-    category: 'Tools & Versioning',
+    category: 'Frontend UI',
     description: 'Next-generation frontend tooling offering fast hot-module reload and optimized builds.',
     iconName: 'Zap',
-    isIntegratedNow: true,
-  },
-  {
-    name: 'Git & GitHub',
-    category: 'Tools & Versioning',
-    description: 'Version control system for collaboration and project repository management.',
-    iconName: 'GitBranch',
     isIntegratedNow: true,
   },
 ];

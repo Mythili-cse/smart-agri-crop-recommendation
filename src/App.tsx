@@ -5,16 +5,24 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Recommendation } from './pages/Recommendation';
 import { ResultPage } from './pages/Result';
+import { CropsPage } from './pages/Crops';
 import { About } from './pages/About';
-import { Team } from './pages/Team';
 
 // Helper component to reset scroll position on route change
 const ScrollToTop: React.FC = () => {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 };
@@ -33,8 +41,8 @@ export function App() {
             <Route path="/" element={<Home />} />
             <Route path="/recommend" element={<Recommendation />} />
             <Route path="/result" element={<ResultPage />} />
+            <Route path="/crops" element={<CropsPage />} />
             <Route path="/about" element={<About />} />
-            <Route path="/team" element={<Team />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
@@ -47,3 +55,4 @@ export function App() {
 }
 
 export default App;
+

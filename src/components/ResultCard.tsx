@@ -18,6 +18,7 @@ import {
   BarChart3,
   Sliders,
 } from 'lucide-react';
+import { CropImage } from './CropImage';
 
 interface ResultCardProps {
   result: PredictionResult;
@@ -87,13 +88,15 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onReset }) => {
         <div className="grid grid-cols-1 lg:grid-cols-12">
           
           {/* Crop High Quality Image Column */}
-          <div className="lg:col-span-5 relative min-h-[300px] lg:min-h-[100%] overflow-hidden bg-slate-900">
-            <img
+          <div className="lg:col-span-5 relative min-h-[320px] lg:min-h-[100%] overflow-hidden bg-slate-950">
+            <CropImage
               src={crop.image}
-              alt={crop.name}
-              className="w-full h-full object-cover filter brightness-95 hover:scale-105 transition-transform duration-700"
+              alt={`Photo of ${crop.name}`}
+              cropName={crop.name}
+              className="filter brightness-95 hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-slate-950/40" />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-slate-950/40 pointer-events-none" />
             
             <div className="absolute top-4 left-4">
               <span className="px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md text-emerald-400 text-xs font-bold border border-emerald-500/30">
@@ -120,7 +123,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onReset }) => {
                   Primary Recommendation Output
                 </span>
                 <span className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-extrabold shadow-md shadow-emerald-600/20">
-                  {result.confidenceScore}% Compatibility Score
+                  {result.backendConnected ? 'Model Confidence' : 'Recommendation Match'}: {result.confidenceScore}%
                 </span>
               </div>
 
@@ -129,7 +132,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onReset }) => {
               </span>
 
               <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight my-1">
-                {crop.name}
+                🌾 {crop.name}
               </h2>
 
               <p className="text-slate-600 text-base leading-relaxed mt-3">
@@ -229,10 +232,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onReset }) => {
                   </div>
 
                   <div className="relative h-32 rounded-2xl overflow-hidden mb-3">
-                    <img
+                    <CropImage
                       src={item.crop.image}
                       alt={item.crop.name}
-                      className="w-full h-full object-cover"
+                      cropName={item.crop.name}
                     />
                   </div>
 
@@ -419,25 +422,33 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, onReset }) => {
         </div>
       </motion.div>
 
-      {/* Action Buttons: Download/Print & Try Again */}
+      {/* Action Buttons: Try Another Prediction, Back to Home, Download/Print */}
       <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 print:hidden">
-        <button
-          onClick={handlePrint}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 font-extrabold text-base border border-slate-300 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
-        >
-          <Printer className="w-5 h-5 text-slate-600" />
-          <span>Download / Print Result</span>
-        </button>
-
         <button
           onClick={onReset}
           className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-base shadow-xl shadow-emerald-600/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
         >
           <RotateCcw className="w-5 h-5 text-white" />
-          <span>Try Another Input</span>
+          <span>Try Another Prediction</span>
+        </button>
+
+        <button
+          onClick={() => window.location.href = '/'}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-extrabold text-base border border-slate-700 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        >
+          <span>Back to Home</span>
+        </button>
+
+        <button
+          onClick={handlePrint}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-800 font-extrabold text-base border border-slate-300 shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer"
+        >
+          <Printer className="w-5 h-5 text-slate-600" />
+          <span>Print / Export Report</span>
         </button>
       </div>
 
     </div>
   );
 };
+

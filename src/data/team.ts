@@ -3,7 +3,7 @@ import type { TeamMember } from '../types';
 export const teamMembers: TeamMember[] = [
   {
     name: 'Lokeshwari T',
-    registerNumber: '312824104072',
+    registerNumber: '312824104089',
     department: 'Department of Computer Science and Engineering',
     role: 'Mini Project Team Member',
     initials: 'LT',
